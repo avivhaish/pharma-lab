@@ -1,0 +1,1 @@
+// setup a global auth instance using firebase,context and maybe a custom hook.
