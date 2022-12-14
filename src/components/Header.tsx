@@ -16,7 +16,7 @@ const Header = () => {
                 >
                     <Offcanvas.Header closeButton>
                         <Offcanvas.Title id={`offcanvasNavbarLabel-expand`}>
-                            Offcanvas
+                            Pharma Lab
                         </Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body>
