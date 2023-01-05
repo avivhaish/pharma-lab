@@ -5,7 +5,7 @@ import { AuthContextProvider } from "./context/AuthContext";
 // PAGES
 import Login from "./pages/Login";
 import AddEntities from "./pages/admin/AddEntities";
-
+import Register from "./pages/admin/Register";
 
 const App = () => {
   return (
@@ -14,6 +14,7 @@ const App = () => {
         <Layout>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/add" element={<AddEntities />} />
           </Routes>
         </Layout>
