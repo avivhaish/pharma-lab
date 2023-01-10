@@ -1,67 +1,79 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged,
     Unsubscribe,
+    User,
+    UserCredential,
 } from 'firebase/auth';
-import { auth } from '../firebase/config';
+import { setDoc, doc } from 'firebase/firestore';
+import { auth, db } from '../firebase/config';
 
 const UserContext = createContext<any>(null);
 
-type TUser = {
-    isAdmin: boolean,
-    name: string
+type TUserData = {
+    name: string;
+    isAdmin: boolean
 }
 
-const DUMMY_ADMIN: TUser = {
-    isAdmin: true,
-    name: "I'm An Admin"
-}
-
-const DUMMY_USER: TUser = {
-    isAdmin: false,
-    name: "I'm A Regular User"
+type TAuthCtx = {
+    createUser: (email: string, password: string) => Promise<UserCredential>;
+    userAuth: User | null;
+    logout: () => Promise<void>;
+    login: (email: string, password: string) => Promise<UserCredential>;
+    addUserToDB: (id: string, data: TUserData) => Promise<void>;
 }
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-    // const [user, setUser] = useState<TUser>();
-    // const [user, setUser] = useState<TUser>(DUMMY_USER);
-    const [user, setUser] = useState<TUser>(DUMMY_ADMIN);
+    const [userAuth, setUserAuth] = useState<User | null>(null);
+    const [userData, setUserData] = useState<TUserData | null>(null);
 
     const createUser = (email: string, password: string) => {
         return createUserWithEmailAndPassword(auth, email, password);
     };
 
-    // const login = (email: string, password: string) => {
-    //     return signInWithEmailAndPassword(auth, email, password)
-    // }
-
-    const login = (email: string) => {
-        setUser({ isAdmin: false, name: email })
+    const addUserToDB = (id: string, data: TUserData) => {
+        return setDoc(doc(db, "users", id), data);
     }
+
+    const login = (email: string, password: string) => {
+        return signInWithEmailAndPassword(auth, email, password);
+    };
 
     const logout = () => {
-        return signOut(auth)
-    }
+        return signOut(auth);
+    };
 
-    // useEffect(() => {
-    //     const unsubscribe: Unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-    //         console.log(currentUser);
-    //         setUser(currentUser);
-    //     });
+    useEffect(() => {
+        const unsubscribe: Unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            console.log(currentUser);
+            setUserAuth(currentUser);
+        });
 
-    //     return unsubscribe;
-    // }, []);
+        return unsubscribe;
+    }, []);
+
+    useEffect(() => {
+        console.log(userAuth)
+    }, [userAuth])
+
+    const ctxValue: TAuthCtx = {
+        createUser,
+        userAuth,
+        logout,
+        login,
+        addUserToDB
+    };
 
     return (
-        <UserContext.Provider value={{ createUser, user, logout, login }}>
+        <UserContext.Provider value={ctxValue}>
             {children}
         </UserContext.Provider>
     );
 };
 
 export const useAuth = () => {
-    return useContext(UserContext);
+    return useContext<TAuthCtx>(UserContext);
 };

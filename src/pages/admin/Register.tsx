@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { useAuth } from '../../context/AuthContext';
 
 type Props = {}
 
@@ -10,6 +11,8 @@ const Register: React.FC<Props> = () => {
     const [password, setPassword] = React.useState<string>("");
     const [verifyPassword, setVerifyPassword] = React.useState<string>("");
 
+    const { createUser, addUserToDB } = useAuth();
+
     const resetStates = useCallback(() => {
         setFullName("");
         setEmail("");
@@ -17,7 +20,7 @@ const Register: React.FC<Props> = () => {
         setVerifyPassword("");
     }, [])
 
-    const handleSubmit = (e: React.SyntheticEvent) => {
+    const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
 
         if (!fullName || !email || !password || !verifyPassword) {
@@ -28,14 +31,16 @@ const Register: React.FC<Props> = () => {
             return alert("Passwords do not match!");
         }
 
-        alert(JSON.stringify({
-            fullName,
-            email,
-            password,
-            verifyPassword
-        }));
-
-        resetStates();
+        try {
+            const u = await createUser(email, password);
+            await addUserToDB(u.user.uid, {
+                name: fullName,
+                isAdmin: false
+            });
+            resetStates();
+        } catch (error) {
+            alert(error);
+        }
     };
 
     return (
