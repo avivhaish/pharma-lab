@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 
 type Props = {}
@@ -10,6 +11,7 @@ const Register: React.FC<Props> = () => {
     const [email, setEmail] = React.useState<string>("");
     const [password, setPassword] = React.useState<string>("");
     const [verifyPassword, setVerifyPassword] = React.useState<string>("");
+    const [isAdmin, setIsAdmin] = React.useState(false);
 
     const { createUser, addUserToDB } = useAuth();
 
@@ -18,6 +20,7 @@ const Register: React.FC<Props> = () => {
         setEmail("");
         setPassword("");
         setVerifyPassword("");
+        setIsAdmin(false);
     }, [])
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
@@ -32,14 +35,22 @@ const Register: React.FC<Props> = () => {
         }
 
         try {
-            const u = await createUser(email, password);
-            await addUserToDB(u.user.uid, {
-                name: fullName,
-                isAdmin: false
+            const res = await axios.post("http://localhost:3001/auth/signup", {
+                fullName,
+                email,
+                password,
+                isAdmin
             });
+
+            console.log(res);
+
+            if (res?.status !== 201) {
+                return alert("something went wrong");
+            }
+
             resetStates();
         } catch (error) {
-            alert(error);
+            alert(JSON.stringify(error));
         }
     };
 
@@ -75,13 +86,21 @@ const Register: React.FC<Props> = () => {
                 />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
+            <Form.Group className="mb-3" controlId="formVerifyPassword">
                 <Form.Label>Verify Password</Form.Label>
                 <Form.Control
                     type="password"
                     placeholder="Verify password"
                     value={verifyPassword}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVerifyPassword(e.target.value)}
+                />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formVerifyPassword">
+                <Form.Label>Register as Admin?</Form.Label>
+                <Form.Check
+                    checked={isAdmin}
+                    onChange={() => setIsAdmin(state => !state)}
                 />
             </Form.Group>
 
