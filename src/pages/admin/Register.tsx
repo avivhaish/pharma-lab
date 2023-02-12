@@ -1,7 +1,8 @@
+import { UserCredential } from 'firebase/auth';
 import React, { useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import axios from 'axios';
+// import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 
 type Props = {}
@@ -21,42 +22,27 @@ const Register: React.FC<Props> = () => {
         setPassword("");
         setVerifyPassword("");
         setIsAdmin(false);
-    }, [])
+    }, []);
 
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-
-        if (!fullName || !email || !password || !verifyPassword) {
-            return alert("Missing Info");
-        }
-
-        if (password !== verifyPassword) {
-            return alert("Passwords do not match!");
-        }
-
         try {
-            const res = await axios.post("http://localhost:3001/auth/signup", {
-                fullName,
-                email,
-                password,
+            const xxx: UserCredential = await createUser(email, password);
+            await addUserToDB(xxx.user.uid, {
+                name: fullName,
                 isAdmin
             });
 
-            console.log(res);
-
-            if (res?.status !== 201) {
-                return alert("something went wrong");
-            }
-
+            alert("Success");
             resetStates();
         } catch (error) {
-            alert(JSON.stringify(error));
+            console.log(error);
         }
-    };
+    }
 
     return (
         <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Group className="mb-3" controlId="formBasicName">
                 <Form.Label>Full Name</Form.Label>
                 <Form.Control
                     type="text"
@@ -96,7 +82,7 @@ const Register: React.FC<Props> = () => {
                 />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formVerifyPassword">
+            <Form.Group className="mb-3" controlId="formIsAdmin">
                 <Form.Label>Register as Admin?</Form.Label>
                 <Form.Check
                     checked={isAdmin}
@@ -112,3 +98,35 @@ const Register: React.FC<Props> = () => {
 };
 
 export default Register;
+
+
+// const handleSubmit = async (e: React.SyntheticEvent) => {
+//     e.preventDefault();
+
+//     if (!fullName || !email || !password || !verifyPassword) {
+//         return alert("Missing Info");
+//     }
+
+//     if (password !== verifyPassword) {
+//         return alert("Passwords do not match!");
+//     }
+
+//     try {
+//         const res = await axios.post("http://localhost:3001/auth/signup", {
+//             fullName,
+//             email,
+//             password,
+//             isAdmin
+//         });
+
+//         console.log(res);
+
+//         if (res?.status !== 201) {
+//             return alert("something went wrong");
+//         }
+
+//         resetStates();
+//     } catch (error) {
+//         alert(JSON.stringify(error));
+//     }
+// };

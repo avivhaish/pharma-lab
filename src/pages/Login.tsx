@@ -1,3 +1,4 @@
+import { UserCredential } from 'firebase/auth';
 import React, { useState, FC } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -6,18 +7,20 @@ import { useAuth } from '../context/AuthContext';
 const Login: FC = () => {
     console.log("render");
 
-    const { user, login } = useAuth();
-
-    console.log(user);
+    const { login } = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    // this is a dummy function, once we will setup firebase and an auth context we'll refactor.
-    function handleLogin(e: React.FormEvent) {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log({ email, password });
-        login(email)
+        try {
+            const ccc: UserCredential = await login(email, password);
+            // לשלוף את היוזר מהפיירסטור, ואז לעשות להזריק רת היוזר הזה לקונטקסט
+            // אם הפעולה הצליחה, לנתב לעמוד הבית
+        } catch (error) {
+            alert(error)
+        }
     }
 
     return (
@@ -31,7 +34,6 @@ const Login: FC = () => {
                     onChange={(e: React.ChangeEvent<any>) => setEmail(e.target.value)}
                 />
             </Form.Group>
-            <p>{user && JSON.stringify(user)}</p>
             <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
                 <Form.Control

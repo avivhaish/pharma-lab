@@ -46,18 +46,18 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         return signOut(auth);
     };
 
-    useEffect(() => {
-        const unsubscribe: Unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            console.log(currentUser);
-            setUserAuth(currentUser);
-        });
+    // useEffect(() => {
+    //     const unsubscribe: Unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    //         console.log(currentUser);
+    //         setUserAuth(currentUser);
+    //     });
 
-        return unsubscribe;
-    }, []);
+    //     return unsubscribe;
+    // }, []);
 
-    useEffect(() => {
-        console.log(userAuth)
-    }, [userAuth])
+    // useEffect(() => {
+    //     console.log(userAuth)
+    // }, [userAuth])
 
     const ctxValue: TAuthCtx = {
         createUser,

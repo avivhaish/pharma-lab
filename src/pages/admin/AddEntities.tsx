@@ -3,10 +3,13 @@ import { Form } from 'react-bootstrap';
 import NewItemForm from '../../components/NewItemForm';
 import NewStorageForm from '../../components/NewStorageForm';
 import NewUserForm from '../../components/NewUserForm';
+import Register from './Register';
+import Button from 'react-bootstrap/Button';
+
 
 type Props = {}
 
-enum EFormModes {
+const enum EFormModes {
     User = "User",
     Item = "Item",
     Storage = "Storage"
@@ -23,7 +26,7 @@ const AddEntities = (props: Props) => {
         }
 
         if (formMode === EFormModes.User) {
-            return <NewUserForm />
+            return <Register />
         }
 
         if (formMode === EFormModes.Item) {
@@ -38,14 +41,16 @@ const AddEntities = (props: Props) => {
     return (
         <div>
             <h5>please select an entity you would like to add</h5>
-            <Form.Select
-                defaultValue="choose an option"
-                value={formMode}
-                onChange={e => setFormMode(e.target.value as EFormModes)}
-            >
-                <option disabled>choose an option</option>
-                {options.map((o) => <option value={o}>{o}</option>)}
-            </Form.Select>
+            <div className='p-2 mb-3'>
+                <Form.Select
+                    defaultValue="choose an option"
+                    value={formMode}
+                    onChange={e => setFormMode(e.target.value as EFormModes)}
+                >
+                    <option disabled>choose an option</option>
+                    {options.map((o) => <option value={o}>{o}</option>)}
+                </Form.Select>
+            </div>
             {renderRelevantForm()}
         </div>
     );
