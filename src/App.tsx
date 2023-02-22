@@ -1,3 +1,4 @@
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import { AuthContextProvider } from "./context/AuthContext";
@@ -6,13 +7,17 @@ import { AuthContextProvider } from "./context/AuthContext";
 import Login from "./pages/Login";
 import AddEntities from "./pages/admin/AddEntities";
 import Register from "./pages/admin/Register";
+import Home from "./pages/Home";
+import Storage from "./pages/Storage";
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <AuthContextProvider>
       <div className="app-wrapper">
         <Layout>
           <Routes>
+            <Route index path="/" element={<Home />} />
+            <Route index path="/storage/:id" element={<Storage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/add" element={<AddEntities />} />
