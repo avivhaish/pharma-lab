@@ -9,6 +9,7 @@ import AddEntities from "./pages/admin/AddEntities";
 import Register from "./pages/admin/Register";
 import Home from "./pages/Home";
 import Storage from "./pages/Storage";
+import Items from "./pages/Items";
 
 const App: React.FC = () => {
   return (
@@ -21,6 +22,7 @@ const App: React.FC = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/add" element={<AddEntities />} />
+            <Route path="/items" element={<Items />} />
           </Routes>
         </Layout>
       </div>
