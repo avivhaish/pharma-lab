@@ -6,7 +6,6 @@ import NewUserForm from '../../components/NewUserForm';
 import Register from './Register';
 import Button from 'react-bootstrap/Button';
 
-
 type Props = {}
 
 const enum EFormModes {
@@ -48,7 +47,9 @@ const AddEntities = (props: Props) => {
                     onChange={e => setFormMode(e.target.value as EFormModes)}
                 >
                     <option disabled>choose an option</option>
-                    {options.map((o) => <option value={o}>{o}</option>)}
+                    {options.map((o) => (
+                        <option key={o} value={o}>{o}</option>
+                    ))}
                 </Form.Select>
             </div>
             {renderRelevantForm()}

@@ -20,12 +20,12 @@ const Storage: React.FC = () => {
         }
 
         setStorage(findStorageById);
-    }, [])
-
+    }, [id]);
 
     return (
         <div>
-            <h1>{storage.id}, {storage.name}</h1>
+            {!id && "NO ID"}
+            {storage && <h1>{storage.id}, {storage.name}</h1>}
         </div>
     );
 };
