@@ -1,32 +1,54 @@
+import { onSnapshot, query, Unsubscribe, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { DUMMY_STORAGE } from './Home';
-
-type Props = {}
+import { useNavigate, useParams } from 'react-router-dom';
+import { itemsCollectionRef } from '../firebase/collections';
 
 const Storage: React.FC = () => {
-    const [storage, setStorage] = useState<any>();
+    const [items, setItems] = useState<any[]>([]);
+
     const { id } = useParams();
+    console.log(typeof id)
+    const navigate = useNavigate();
+
+    const goToItem = (itemId: string): void => {
+        navigate("/item/" + itemId);
+    };
 
     useEffect(() => {
-        if (!id) {
-            return;
+        const q = query(itemsCollectionRef, where("parentStorage", "==", id))
+
+        const unsubscribe: Unsubscribe = onSnapshot(q, (snapshot) => {
+            console.log(snapshot)
+            setItems(snapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data()
+            })))
+        });
+
+        return () => {
+            console.log("Unsubscribe")
+            unsubscribe();
         }
 
-        const findStorageById = DUMMY_STORAGE.find((storage) => storage.id === Number(id));
-
-        if (!findStorageById) {
-            return;
-        }
-
-        setStorage(findStorageById);
     }, [id]);
 
     return (
-        <div>
-            {!id && "NO ID"}
-            {storage && <h1>{storage.id}, {storage.name}</h1>}
-        </div>
+        <ul className='w-full p-2 flex flex-col items-center text-sky-900'>
+            {items.map(({ id, name, qty }) => (
+                <li
+                    key={id}
+                    className='h-14 bg-slate-400 mb-3 rounded-md flex justify-between items-center px-4 w-full max-w-screen-md shadow-md hover:text-white hover:bg-slate-500 hover:shadow-lg hover:cursor-pointer transition-all duration-100'
+                    onClick={() => goToItem(id)}
+                >
+                    <span>
+                        {name}
+                    </span>
+                    <span>
+                        QTY: {qty}
+                    </span>
+                </li>
+            ))}
+        </ul>
     );
 };
 

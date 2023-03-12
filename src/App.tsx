@@ -14,7 +14,7 @@ import Items from "./pages/Items";
 const App: React.FC = () => {
   return (
     <AuthContextProvider>
-      <div className="app-wrapper">
+      <div className="app-wrapper font-mono">
         <Layout>
           <Routes>
             <Route index path="/" element={<Home />} />
