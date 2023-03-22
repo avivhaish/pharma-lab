@@ -2,11 +2,7 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 import NewItemForm from '../../components/NewItemForm';
 import NewStorageForm from '../../components/NewStorageForm';
-import NewUserForm from '../../components/NewUserForm';
 import Register from './Register';
-import Button from 'react-bootstrap/Button';
-
-type Props = {}
 
 const enum EFormModes {
     User = "User",
@@ -16,7 +12,7 @@ const enum EFormModes {
 
 const options: EFormModes[] = [EFormModes.Item, EFormModes.User, EFormModes.Storage];
 
-const AddEntities = (props: Props) => {
+const AddEntities: React.FC = () => {
     const [formMode, setFormMode] = React.useState<EFormModes>();
 
     const renderRelevantForm = () => {

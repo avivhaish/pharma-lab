@@ -26,6 +26,15 @@ const Header = () => {
                             PROFILE
                         </Link>
                     </li>
+                    {userData && userData.isAdmin && (
+                        <>
+                            <li className='mr-6 hover:cursor-pointer hover:text-teal-600'>
+                                <Link to="/add">
+                                    ADD
+                                </Link>
+                            </li>
+                        </>
+                    )}
                 </ul>
                 <button
                     className='text-white md:hidden'

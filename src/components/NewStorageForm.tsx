@@ -35,7 +35,7 @@ const NewStorageForm = () => {
                     onChange={e => setStorageType(e.target.value as EStorageTypes)}
                 >
                     <option disabled>choose an option</option>
-                    {options.map((o) => <option value={o}>{o}</option>)}
+                    {options.map((o) => <option key={o} value={o}>{o}</option>)}
                 </Form.Select>
             </Form.Group>
             <Form.Group className="mb-3">

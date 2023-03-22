@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import Storage from "./pages/Storage";
 import Items from "./pages/Items";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Unauthorized from "./pages/Unauthorized";
 
 const App: React.FC = () => {
   return (
@@ -19,11 +20,12 @@ const App: React.FC = () => {
         <Layout>
           <Routes>
             <Route index path="/" element={<ProtectedRoute page={Home} />} />
-            <Route index path="/storage/:id" element={<Storage />} />
+            <Route path="/add" element={<ProtectedRoute page={AddEntities} />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/add" element={<AddEntities />} />
+            <Route index path="/storage/:id" element={<Storage />} />
             <Route path="/items" element={<Items />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
           </Routes>
         </Layout>
       </div>

@@ -4,7 +4,6 @@ import Form from 'react-bootstrap/Form';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
-
 const Login: FC = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
@@ -22,7 +21,7 @@ const Login: FC = () => {
         } catch (error) {
             alert(error)
         }
-    }   
+    }
 
     return (
         <Form onSubmit={handleLogin} className='bg-primary text-white border border-primary h-100 p-5 align-center d-flex flex-column rounded'>
