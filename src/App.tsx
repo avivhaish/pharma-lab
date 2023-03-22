@@ -10,6 +10,7 @@ import Register from "./pages/admin/Register";
 import Home from "./pages/Home";
 import Storage from "./pages/Storage";
 import Items from "./pages/Items";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App: React.FC = () => {
   return (
@@ -17,7 +18,7 @@ const App: React.FC = () => {
       <div className="app-wrapper font-mono">
         <Layout>
           <Routes>
-            <Route index path="/" element={<Home />} />
+            <Route index path="/" element={<ProtectedRoute page={Home} />} />
             <Route index path="/storage/:id" element={<Storage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />

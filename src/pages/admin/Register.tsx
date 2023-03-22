@@ -2,7 +2,6 @@ import { UserCredential } from 'firebase/auth';
 import React, { useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-// import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 
 type Props = {}
@@ -27,10 +26,12 @@ const Register: React.FC<Props> = () => {
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
         try {
-            const xxx: UserCredential = await createUser(email, password);
-            await addUserToDB(xxx.user.uid, {
+            const registeredUser: UserCredential = await createUser(email, password);
+
+            await addUserToDB(registeredUser.user.uid, {
                 name: fullName,
-                isAdmin
+                isAdmin,
+                itemsHeldByUser: []
             });
 
             alert("Success");

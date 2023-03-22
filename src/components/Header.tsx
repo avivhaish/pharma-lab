@@ -8,12 +8,13 @@ const Header = () => {
 
     const handleToggle = () => setIsOpen(prevState => !prevState);
 
-    const { logout, userAuth } = useAuth();
+    const { logout, userData } = useAuth();
 
     return (
         <>
             <header className='bg-slate-800 h-20 flex justify-between items-center px-3 relative'>
-                <span className='text-white text-2xl'>PHARMA</span>
+                <span className='text-white text-2xl hover:cursor-pointer'>PHARMA</span>
+                {userData && <span className='text-neutral-50'>{userData.name}</span>}
                 <ul className='text-white hidden md:flex'>
                     <li className='mr-6 hover:cursor-pointer hover:text-teal-600'>
                         <Link to="/">

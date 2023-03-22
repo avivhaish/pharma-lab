@@ -2,32 +2,38 @@ import { createContext, ReactNode, useContext, useEffect, useMemo, useState } fr
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged,
-    Unsubscribe,
-    User,
     UserCredential,
 } from 'firebase/auth';
+import { onSnapshot, Unsubscribe } from 'firebase/firestore';
 import { setDoc, doc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
+import { usersCollectionRef } from '../firebase/collections';
 
 const UserContext = createContext<any>(null);
 
+type THeldItem = {
+    id: string,
+    qty: number
+}
+
 type TUserData = {
+    id?: string;
     name: string;
-    isAdmin: boolean
+    isAdmin: boolean;
+    itemsHeldByUser: THeldItem[]
 }
 
 type TAuthCtx = {
     createUser: (email: string, password: string) => Promise<UserCredential>;
-    userAuth: User | null;
-    logout: () => Promise<void>;
-    login: (email: string, password: string) => Promise<UserCredential>;
+    login: (email: string, password: string) => Promise<void>;
+    logout: () => void;
     addUserToDB: (id: string, data: TUserData) => Promise<void>;
+    userData: TUserData | null;
+    userAuth: UserCredential | null
 }
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-    const [userAuth, setUserAuth] = useState<User | null>(null);
+    const [userAuth, setUserAuth] = useState<UserCredential | null>(null)
     const [userData, setUserData] = useState<TUserData | null>(null);
 
     const createUser = (email: string, password: string) => {
@@ -38,34 +44,54 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
         return setDoc(doc(db, "users", id), data);
     }
 
-    const login = (email: string, password: string) => {
-        return signInWithEmailAndPassword(auth, email, password);
+    const login = async (email: string, password: string) => {
+        const user = await signInWithEmailAndPassword(auth, email, password);
+        setUserAuth(user);
     };
 
     const logout = () => {
-        return signOut(auth);
+        setUserData(null);
     };
-
-    // useEffect(() => {
-    //     const unsubscribe: Unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-    //         console.log(currentUser);
-    //         setUserAuth(currentUser);
-    //     });
-
-    //     return unsubscribe;
-    // }, []);
-
-    // useEffect(() => {
-    //     console.log(userAuth)
-    // }, [userAuth])
 
     const ctxValue: TAuthCtx = {
         createUser,
-        userAuth,
         logout,
         login,
-        addUserToDB
+        addUserToDB,
+        userData,
+        userAuth
     };
+
+    useEffect(() => {
+        if (!userAuth) {
+            return;
+        }
+
+        const unsubscribe: Unsubscribe = onSnapshot(usersCollectionRef, (snapshot) => {
+            const mappedUsers: TUserData[] = snapshot.docs.map(u => {
+                const { name, isAdmin, itemsHeldByUser } = u.data();
+
+                return {
+                    id: u.id,
+                    name,
+                    isAdmin,
+                    itemsHeldByUser
+                }
+            });
+
+            const findUser: TUserData | undefined = mappedUsers.find(u => u.id === userAuth.user.uid);
+
+            if (!findUser) {
+                return alert("NO USER FOUND");
+            }
+
+            setUserData(findUser);
+        });
+
+        return () => {
+            unsubscribe();
+        }
+    }, [userAuth]);
 
     return (
         <UserContext.Provider value={ctxValue}>

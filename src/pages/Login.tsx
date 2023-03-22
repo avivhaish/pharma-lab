@@ -1,13 +1,13 @@
-import { UserCredential } from 'firebase/auth';
 import React, { useState, FC } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
 
 const Login: FC = () => {
-    console.log("render");
-
     const { login } = useAuth();
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -15,13 +15,14 @@ const Login: FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const ccc: UserCredential = await login(email, password);
-            // לשלוף את היוזר מהפיירסטור, ואז לעשות להזריק רת היוזר הזה לקונטקסט
+            await login(email, password);
+            alert("Logged In Successfully!");
             // אם הפעולה הצליחה, לנתב לעמוד הבית
+            navigate("/");
         } catch (error) {
             alert(error)
         }
-    }
+    }   
 
     return (
         <Form onSubmit={handleLogin} className='bg-primary text-white border border-primary h-100 p-5 align-center d-flex flex-column rounded'>
