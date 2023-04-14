@@ -8,24 +8,27 @@ const Header = () => {
 
     const handleToggle = () => setIsOpen(prevState => !prevState);
 
-    const { logout, userData } = useAuth();
+    const { logout, userData, userAuth } = useAuth();
 
     return (
         <>
             <header className='bg-slate-800 h-20 flex justify-between items-center px-3 relative'>
                 <span className='text-white text-2xl hover:cursor-pointer'>PHARMA</span>
-                {userData && <span className='text-neutral-50'>{userData.name}</span>}
                 <ul className='text-white hidden md:flex'>
-                    <li className='mr-6 hover:cursor-pointer hover:text-teal-600'>
-                        <Link to="/">
-                            HOME
-                        </Link>
-                    </li>
-                    <li className='mr-6 hover:cursor-pointer hover:text-teal-600'>
-                        <Link to="/profile">
-                            PROFILE
-                        </Link>
-                    </li>
+                    {userAuth && (
+                        <>
+                            <li className='mr-6 hover:cursor-pointer hover:text-teal-600'>
+                                <Link to="/">
+                                    HOME
+                                </Link>
+                            </li>
+                            <li className='mr-6 hover:cursor-pointer hover:text-teal-600'>
+                                <Link to="/profile">
+                                    PROFILE
+                                </Link>
+                            </li>
+                        </>
+                    )}
                     {userData && userData.isAdmin && (
                         <>
                             <li className='mr-6 hover:cursor-pointer hover:text-teal-600'>
@@ -35,13 +38,23 @@ const Header = () => {
                             </li>
                         </>
                     )}
+                    {userAuth && (
+                        <li
+                            className='mr-6 hover:cursor-pointer hover:text-teal-600'
+                            onClick={logout}
+                        >
+                            LOGOUT
+                        </li>
+                    )}
                 </ul>
-                <button
-                    className='text-white md:hidden'
-                    onClick={handleToggle}
-                >
-                    {isOpen ? <AiOutlineClose size={28} /> : <AiOutlineMenu size={28} />}
-                </button>
+                {userAuth && (
+                    <button
+                        className='text-white md:hidden'
+                        onClick={handleToggle}
+                    >
+                        {isOpen ? <AiOutlineClose size={28} /> : <AiOutlineMenu size={28} />}
+                    </button>
+                )}
             </header>
             {isOpen && (
                 <div className='md:hidden flex py-5 px-4 justify-center bg-slate-500 opacity-95 fixed h-full w-full max-w-xs'>

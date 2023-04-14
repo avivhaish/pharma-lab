@@ -4,9 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useAuth } from '../../context/AuthContext';
 
-type Props = {}
-
-const Register: React.FC<Props> = () => {
+const Register: React.FC = () => {
     const [fullName, setFullName] = React.useState<string>("");
     const [email, setEmail] = React.useState<string>("");
     const [password, setPassword] = React.useState<string>("");

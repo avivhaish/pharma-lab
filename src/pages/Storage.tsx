@@ -7,7 +7,6 @@ const Storage: React.FC = () => {
     const [items, setItems] = useState<any[]>([]);
 
     const { id } = useParams();
-    console.log(typeof id)
     const navigate = useNavigate();
 
     const goToItem = (itemId: string): void => {
@@ -26,10 +25,8 @@ const Storage: React.FC = () => {
         });
 
         return () => {
-            console.log("Unsubscribe")
             unsubscribe();
         }
-
     }, [id]);
 
     return (

@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
+/* eslint-disable react/react-in-jsx-scope */
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -51,6 +52,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
     const logout = () => {
         setUserData(null);
+        setUserAuth(null);
     };
 
     const ctxValue: TAuthCtx = {
