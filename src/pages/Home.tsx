@@ -27,7 +27,6 @@ const Home: React.FC = () => {
         }
     }, []);
 
-
     return (
         <ul className='w-full p-2 flex flex-col items-center text-sky-900'>
             {storages.map(({ id, name }) => (

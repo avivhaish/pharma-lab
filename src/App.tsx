@@ -25,7 +25,7 @@ const App: React.FC = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route index path="/storage/:id" element={<Storage />} />
-            <Route path="/item/:itemId" element={<Item />} />
+            <Route path="/item/:itemId" element={<ProtectedRoute page={Item} />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
           </Routes>
         </Layout>
