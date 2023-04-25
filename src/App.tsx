@@ -9,7 +9,7 @@ import AddEntities from "./pages/admin/AddEntities";
 import Register from "./pages/admin/Register";
 import Home from "./pages/Home";
 import Storage from "./pages/Storage";
-// import Items from "./pages/Items";
+import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Unauthorized from "./pages/Unauthorized";
 import Item from "./pages/Item";
@@ -27,6 +27,7 @@ const App: React.FC = () => {
             <Route index path="/storage/:id" element={<Storage />} />
             <Route path="/item/:itemId" element={<ProtectedRoute page={Item} />} />
             <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route path="/profile" element={<ProtectedRoute page={Profile} />} />
           </Routes>
         </Layout>
       </div>

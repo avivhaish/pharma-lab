@@ -12,13 +12,15 @@ import { usersCollectionRef } from '../firebase/collections';
 
 const UserContext = createContext<any>(null);
 
-type THeldItem = {
+export type THeldItem = {
     id: string,
-    qty: number
+    name: string,
+    qty: number,
+    timestamp: number
 }
 
 type TUserData = {
-    id?: string;
+    id: string;
     name: string;
     isAdmin: boolean;
     itemsHeldByUser: THeldItem[]
@@ -87,6 +89,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
                 return alert("NO USER FOUND");
             }
 
+            console.log(findUser)
             setUserData(findUser);
         });
 
