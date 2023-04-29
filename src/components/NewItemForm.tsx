@@ -8,9 +8,11 @@ import IStorage from '../models/Storage';
 const NewItemForm = () => {
     const [storages, setStorages] = React.useState<IStorage[]>([]);
     const [itemName, setItemName] = React.useState<string>("");
-    const [qty, setQty] = React.useState<number>(0);
+    const [qty, setQty] = React.useState<number>(1);
     const [storage, setStorage] = React.useState<string>("");
     const [location, setLocation] = React.useState<string>("");
+    const [company, setCompany] = React.useState<string>("");
+    const [sku, setSku] = React.useState<string>("");
     const [isToxic, setIsToxic] = React.useState<boolean>(false);
 
     useEffect(() => {
@@ -29,14 +31,16 @@ const NewItemForm = () => {
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
 
-        // if (!itemName || !qty || !storage || !isToxic) {
-        //     return alert("Missing fields");
-        // }
+        if (!itemName || !qty || !storage || !isToxic || !location || !company) {
+            return alert("Missing fields");
+        }
 
         const newItem = {
             name: itemName,
             parentStorage: storage,
             qty,
+            location,
+            company,
             isToxic
         };
 
@@ -44,7 +48,7 @@ const NewItemForm = () => {
             await addDoc(itemsCollectionRef, newItem);
             alert("Item added successfully");
         } catch (error) {
-            alert(error);
+            alert("Something went wrong.");
         }
     }
 
@@ -64,7 +68,7 @@ const NewItemForm = () => {
                 <Form.Control
                     type="number"
                     placeholder="Enter quantity"
-                    min={0}
+                    min={1}
                     value={qty}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQty(e.target.valueAsNumber)}
                 />
@@ -90,6 +94,24 @@ const NewItemForm = () => {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}
                 />
             </Form.Group>
+            <Form.Group className="mb-3">
+                <Form.Label>Company</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="Company"
+                    value={company}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCompany(e.target.value)}
+                />
+            </Form.Group>
+            <Form.Group className="mb-3">
+                <Form.Label>SKU</Form.Label>
+                <Form.Control
+                    type="text"
+                    placeholder="SKU"
+                    value={sku}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSku(e.target.value)}
+                />
+            </Form.Group>
             <Form.Group className="mb-3" controlId="formIsAdmin">
                 <Form.Label>Is it toxic?</Form.Label>
                 <Form.Check
@@ -101,7 +123,7 @@ const NewItemForm = () => {
                 Submit
             </Button>
         </Form >
-    )
+    );
 }
 
-export default NewItemForm
+export default NewItemForm;

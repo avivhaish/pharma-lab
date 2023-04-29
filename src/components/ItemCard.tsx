@@ -7,7 +7,8 @@ interface Props {
     name: string,
     quantity: number,
     isToxic: boolean,
-    expirationDate: string
+    expirationDate: string,
+    
 }
 
 const ProductCard: React.FC<Props> = ({ name, quantity, isToxic, expirationDate }) => {

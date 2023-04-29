@@ -76,8 +76,11 @@ const Item: React.FC = () => {
                 <>
                     <div className='flex flex-col gap-1'>
                         <span>Item Name: {item[0].name}</span>
+                        <span>SKU: {item[0].sku}</span>
                         <span>QTY: {item[0].qty}</span>
-                        <span>Toxic: {item[0].isToxic ? "Yes" : "No"}</span>
+                        <span>Company: {item[0].company}</span>
+                        <span>Location: {item[0].location}</span>
+                        <span>Toxic?: {item[0].isToxic ? "Yes" : "No"}</span>
                     </div>
                     <br />
                     <div className='w-full flex flex-col py-3 gap-3 items-center border-t'>
