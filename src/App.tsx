@@ -23,11 +23,11 @@ const App: React.FC = () => {
             <Route index path="/" element={<ProtectedRoute page={Home} />} />
             <Route path="/add" element={<ProtectedRoute page={AddEntities} />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            {/* <Route path="/register" element={<ProtectedRoute page={Register} />} /> */}
             <Route index path="/storage/:id" element={<Storage />} />
             <Route path="/item/:itemId" element={<ProtectedRoute page={Item} />} />
-            <Route path="/unauthorized" element={<Unauthorized />} />
             <Route path="/profile" element={<ProtectedRoute page={Profile} />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
           </Routes>
         </Layout>
       </div>

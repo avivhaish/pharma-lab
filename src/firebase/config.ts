@@ -4,13 +4,13 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBLbWojutb3iElDhxjlTecqH0mxt-dbyJk",
-  authDomain: "pharma-lab.firebaseapp.com",
-  projectId: "pharma-lab",
-  storageBucket: "pharma-lab.appspot.com",
-  messagingSenderId: "317806266228",
-  appId: "1:317806266228:web:2bf50c4a5bab659ea30e21",
-  measurementId: "G-CEVND73KE8"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE__MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);
