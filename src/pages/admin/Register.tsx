@@ -29,7 +29,8 @@ const Register: React.FC = () => {
             await addUserToDB(registeredUser.user.uid, {
                 name: fullName,
                 isAdmin,
-                itemsHeldByUser: []
+                itemsHeldByUser: [],
+                
             });
 
             alert("Success");

@@ -6,7 +6,7 @@ import { AuthContextProvider } from "./context/AuthContext";
 // PAGES
 import Login from "./pages/Login";
 import AddEntities from "./pages/admin/AddEntities";
-import Register from "./pages/admin/Register";
+// import Register from "./pages/admin/Register";
 import Home from "./pages/Home";
 import Storage from "./pages/Storage";
 import Profile from "./pages/Profile";

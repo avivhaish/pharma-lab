@@ -20,10 +20,10 @@ export type THeldItem = {
 }
 
 type TUserData = {
-    id: string;
     name: string;
     isAdmin: boolean;
     itemsHeldByUser: THeldItem[]
+    id?: string;
 }
 
 type TAuthCtx = {
