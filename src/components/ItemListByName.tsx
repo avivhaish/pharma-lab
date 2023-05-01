@@ -1,41 +1,41 @@
-import { onSnapshot, query, Unsubscribe, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { onSnapshot, Unsubscribe } from 'firebase/firestore';
 import { itemsCollectionRef } from '../firebase/collections';
+import { useNavigate } from 'react-router-dom';
 
-const Storage: React.FC = () => {
-    const [items, setItems] = useState<any[]>([]);
+interface Props {
+    name: string
+}
 
-    const { id } = useParams();
+const ItemListByName: React.FC<Props> = ({ name }) => {
     const navigate = useNavigate();
+
+
+    const [items, setItems] = useState<any[]>([]);
 
     const goToItem = (itemId: string): void => {
         navigate("/item/" + itemId);
     };
 
     useEffect(() => {
-        const q = query(itemsCollectionRef, where("parentStorage", "==", id))
-
-        const unsubscribe: Unsubscribe = onSnapshot(q, (snapshot) => {
-            console.log(snapshot)
-            setItems(snapshot.docs.map((doc) => ({
+        const unsubscribe: Unsubscribe = onSnapshot(itemsCollectionRef, (snapshot) => {
+            const data = snapshot.docs.map((doc: any) => ({
                 id: doc.id,
                 ...doc.data()
-            })))
+            }));
+
+            const fillteredData = data.filter(doc => doc.name.includes(name) || doc.name.toLowerCase().includes(name))
+            setItems(fillteredData);
         });
 
         return () => {
+            console.log("Unsubscribe")
             unsubscribe();
         }
-    }, [id]);
+    }, [name]);
 
     if (items.length === 0) {
-        return (
-            <>
-                <span>There are no items in this storage unit.</span>
-                <span>Please go to the ADD page, add a new item, and refer it to this storage unit.</span>
-            </>
-        )
+        return <span>No Items Found!</span>
     }
 
     return (
@@ -55,7 +55,7 @@ const Storage: React.FC = () => {
                 </li>
             ))}
         </ul>
-    );
-};
+    )
+}
 
-export default Storage;
+export default ItemListByName;

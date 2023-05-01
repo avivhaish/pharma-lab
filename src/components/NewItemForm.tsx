@@ -9,6 +9,7 @@ const NewItemForm = () => {
     const [storages, setStorages] = React.useState<IStorage[]>([]);
     const [itemName, setItemName] = React.useState<string>("");
     const [qty, setQty] = React.useState<number>(1);
+    const [minQtyWanted, setMinQtyWanted] = React.useState<number>(1);
     const [storage, setStorage] = React.useState<string>("");
     const [location, setLocation] = React.useState<string>("");
     const [company, setCompany] = React.useState<string>("");
@@ -31,7 +32,7 @@ const NewItemForm = () => {
     const handleSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
 
-        if (!itemName || !qty || !storage || !isToxic || !location || !company) {
+        if (!itemName || !qty || !minQtyWanted || !storage || !location || !company) {
             return alert("Missing fields");
         }
 
@@ -41,12 +42,22 @@ const NewItemForm = () => {
             qty,
             location,
             company,
-            isToxic
+            isToxic,
+            sku,
+            minQtyWanted
         };
 
         try {
             await addDoc(itemsCollectionRef, newItem);
             alert("Item added successfully");
+            setItemName("");
+            setQty(1);
+            setMinQtyWanted(1);
+            setLocation("");
+            setSku("");
+            setCompany("");
+            setIsToxic(false);
+            setStorage("");
         } catch (error) {
             alert("Something went wrong.");
         }
@@ -71,6 +82,16 @@ const NewItemForm = () => {
                     min={1}
                     value={qty}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQty(e.target.valueAsNumber)}
+                />
+            </Form.Group>
+            <Form.Group className="mb-3">
+                <Form.Label>Minimum Quantity To Notify</Form.Label>
+                <Form.Control
+                    type="number"
+                    placeholder="Enter quantity"
+                    min={1}
+                    value={minQtyWanted}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMinQtyWanted(e.target.valueAsNumber)}
                 />
             </Form.Group>
             <Form.Group className="mb-3">

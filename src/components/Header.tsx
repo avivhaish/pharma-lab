@@ -13,7 +13,7 @@ const Header = () => {
     return (
         <>
             <header className='bg-slate-800 h-20 flex justify-between items-center px-3 relative'>
-                <span className='text-white text-2xl hover:cursor-pointer'>PHARMA</span>
+                <span className='text-white text-2xl hover:cursor-pointer'>PHARMA LAB</span>
                 <ul className='text-white hidden md:flex'>
                     {userAuth && (
                         <>
@@ -34,6 +34,11 @@ const Header = () => {
                             <li className='mr-6 hover:cursor-pointer hover:text-teal-600'>
                                 <Link to="/add">
                                     ADD
+                                </Link>
+                            </li>
+                            <li className='mr-6 hover:cursor-pointer hover:text-teal-600'>
+                                <Link to="/notifications">
+                                    NOTIFICATIONS
                                 </Link>
                             </li>
                         </>
@@ -69,6 +74,28 @@ const Header = () => {
                                 PROFILE
                             </Link>
                         </li>
+                        {userData && userData.isAdmin && (
+                            <>
+                                <li className='mr-6 hover:cursor-pointer text-white hover:text-slate-800 border-b-2 w-full py-2'>
+                                    <Link to="/add">
+                                        ADD
+                                    </Link>
+                                </li>
+                                <li className='mr-6 hover:cursor-pointer text-white hover:text-slate-800 border-b-2 w-full py-2'>
+                                    <Link to="/notifications">
+                                        NOTIFICATIONS
+                                    </Link>
+                                </li>
+                            </>
+                        )}
+                        {userAuth && (
+                            <li
+                                className='mr-6 hover:cursor-pointer text-white hover:text-slate-800 border-b-2 w-full py-2'
+                                onClick={logout}
+                            >
+                                LOGOUT
+                            </li>
+                        )}
                     </ul>
                 </div>
             )}

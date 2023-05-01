@@ -1,6 +1,8 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { addDoc } from 'firebase/firestore';
+import { storageCollectionRef } from '../firebase/collections';
 
 const enum EStorageTypes {
     Cabinet = "Cabinet",
@@ -23,9 +25,21 @@ const NewStorageForm = () => {
     const [storageNumber, setStorageNumber] = React.useState<number>(0);
 
     return (
-        <Form onSubmit={(e: React.SyntheticEvent) => {
+        <Form onSubmit={async (e: React.SyntheticEvent) => {
             e.preventDefault();
-            alert("Created a new Storage successfully!");
+
+            if (!storageType) {
+                return alert("Please select a storage type");
+            }
+
+            try {
+                await addDoc(storageCollectionRef, {
+                    name: `${storageType} (${storageNumber})`
+                });
+                alert("Created a new Storage successfully!");
+            } catch (error) {
+                alert(error);
+            }
         }}>
             <Form.Group className="mb-3">
                 <Form.Label>StorageType</Form.Label>
