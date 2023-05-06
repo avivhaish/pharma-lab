@@ -25,7 +25,7 @@ const App: React.FC = () => {
             <Route path="/add" element={<ProtectedRoute page={AddEntities} />} />
             <Route path="/login" element={<Login />} />
             {/* <Route path="/register" element={<ProtectedRoute page={Register} />} /> */}
-            <Route index path="/storage/:id" element={<Storage />} />
+            <Route index path="/storage/:id/:name" element={<Storage />} />
             <Route path="/item/:itemId" element={<ProtectedRoute page={Item} />} />
             <Route path="/profile" element={<ProtectedRoute page={Profile} />} />
             <Route path="/notifications" element={<ProtectedRoute page={Notifications} />} />

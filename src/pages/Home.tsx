@@ -11,8 +11,8 @@ const Home: React.FC = () => {
 
     const navigate = useNavigate();
 
-    const goToStorage = (storageId: string): void => {
-        navigate("/storage/" + storageId);
+    const goToStorage = (storageId: string, storageName: string): void => {
+        navigate("/storage/" + storageId + "/" + storageName);
     }
 
     useEffect(() => {
@@ -54,7 +54,7 @@ const Home: React.FC = () => {
                             <li
                                 key={id}
                                 className='h-14 bg-slate-400 mb-3 rounded-md flex justify-center items-center px-3 w-full max-w-screen-md shadow-md hover:text-white hover:bg-slate-500 hover:shadow-lg hover:cursor-pointer transition-all duration-100'
-                                onClick={() => goToStorage(id)}
+                                onClick={() => goToStorage(id, name)}
                             >
                                 {name}
                             </li>

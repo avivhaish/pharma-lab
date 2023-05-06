@@ -30,7 +30,7 @@ const Register: React.FC = () => {
                 name: fullName,
                 isAdmin,
                 itemsHeldByUser: [],
-                
+
             });
 
             alert("Success");
@@ -90,9 +90,12 @@ const Register: React.FC = () => {
                 />
             </Form.Group>
 
-            <Button variant="primary" type="submit" className='w-100'>
+            <button
+                type="submit"
+                className='w-full bg-slate-600 text-white px-2 py-3 rounded hover:bg-slate-700'
+            >
                 Submit
-            </Button>
+            </button>
         </Form>
     );
 };

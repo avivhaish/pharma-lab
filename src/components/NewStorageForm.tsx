@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { addDoc } from 'firebase/firestore';
+import { Unsubscribe, addDoc, onSnapshot } from 'firebase/firestore';
 import { storageCollectionRef } from '../firebase/collections';
+import IStorage from '../models/Storage';
 
 const enum EStorageTypes {
     Cabinet = "Cabinet",
@@ -23,6 +24,21 @@ const options: EStorageTypes[] = [
 const NewStorageForm = () => {
     const [storageType, setStorageType] = React.useState<EStorageTypes>();
     const [storageNumber, setStorageNumber] = React.useState<number>(0);
+    const [storages, setStorages] = useState<IStorage[]>([]);
+
+    useEffect(() => {
+        const unsubscribe: Unsubscribe = onSnapshot(storageCollectionRef, (snapshot) => {
+            setStorages(snapshot.docs.map((doc) => ({
+                id: doc.id,
+                name: doc.data().name
+            })))
+        });
+
+        return () => {
+            console.log("Unsubscribe")
+            unsubscribe();
+        }
+    }, []);
 
     return (
         <Form onSubmit={async (e: React.SyntheticEvent) => {
@@ -32,9 +48,15 @@ const NewStorageForm = () => {
                 return alert("Please select a storage type");
             }
 
+            const name = `${storageType} (${storageNumber})`;
+
+            if (storages.find((s) => s.name === name)) {
+                return alert("Storage number is taken");
+            }
+
             try {
                 await addDoc(storageCollectionRef, {
-                    name: `${storageType} (${storageNumber})`
+                    name
                 });
                 alert("Created a new Storage successfully!");
             } catch (error) {
@@ -62,11 +84,14 @@ const NewStorageForm = () => {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStorageNumber(e.target.valueAsNumber)}
                 />
             </Form.Group>
-            <Button variant="primary" type="submit" className='w-100'>
+            <button
+                type="submit"
+                className='w-full bg-slate-600 text-white px-2 py-3 rounded hover:bg-slate-700'
+            >
                 Submit
-            </Button>
+            </button>
         </Form>
-    )
+    );
 }
 
 export default NewStorageForm;

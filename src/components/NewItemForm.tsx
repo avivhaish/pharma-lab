@@ -15,6 +15,9 @@ const NewItemForm = () => {
     const [company, setCompany] = React.useState<string>("");
     const [sku, setSku] = React.useState<string>("");
     const [isToxic, setIsToxic] = React.useState<boolean>(false);
+    const [box, setBox] = React.useState<string>("");
+    const [storageName, setStorageName] = React.useState<string>("");
+
 
     useEffect(() => {
         const unsubscribe: Unsubscribe = onSnapshot(storageCollectionRef, (snapshot) => {
@@ -98,7 +101,9 @@ const NewItemForm = () => {
                 <Form.Label>Storage</Form.Label>
                 <Form.Select
                     defaultValue="choose an option"
-                    onChange={e => setStorage(e.target.value)}
+                    onChange={e => {
+                        setStorage(e.target.value);
+                    }}
                 >
                     <option disabled>choose an option</option>
                     {storages.map(({ id, name }) => (
@@ -115,6 +120,17 @@ const NewItemForm = () => {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}
                 />
             </Form.Group>
+            {storage.includes("Freezer") && (
+                <Form.Group className="mb-3">
+                    <Form.Label>Box</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Location"
+                        value={box}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBox(e.target.value)}
+                    />
+                </Form.Group>
+            )}
             <Form.Group className="mb-3">
                 <Form.Label>Company</Form.Label>
                 <Form.Control
@@ -140,9 +156,12 @@ const NewItemForm = () => {
                     onChange={() => setIsToxic(state => !state)}
                 />
             </Form.Group>
-            <Button type="submit" className='w-100'>
+            <button
+                type="submit"
+                className='w-full bg-slate-600 text-white px-2 py-3 rounded hover:bg-slate-700'
+            >
                 Submit
-            </Button>
+            </button>
         </Form >
     );
 }
