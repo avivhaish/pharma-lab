@@ -71,7 +71,7 @@ const Item: React.FC = () => {
     }
 
     return (
-        <div className='bg-slate-400 flex flex-col gap-1 items-center text-lg min-w-[250px] w-1/2 rounded-sm p-3 shadow-md'>
+        <div className=' bg-green-200 flex flex-col gap-1 items-center text-lg min-w-[250px] w-1/2 rounded-sm p-3 shadow-md'>
             {item && (
                 <>
                     <div className='flex flex-col gap-1'>
