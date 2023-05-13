@@ -42,7 +42,7 @@ const Storage: React.FC = () => {
         <>
             <span className='text-xl font-bold'>{name}</span>
             <ul className='w-full p-2 flex flex-col items-center'>
-                {items.map(({ id, name, qty }) => (
+                {items.sort((a, b) => a.name.localeCompare(b.name)).map(({ id, name, qty }) => (
                     <li
                         key={id}
                         className='h-14 bg-green-300 mb-3 rounded-md flex justify-between items-center px-4 w-full max-w-screen-md shadow-md hover:text-white hover:bg-emerald-500 hover:shadow-lg hover:cursor-pointer transition-all duration-100'

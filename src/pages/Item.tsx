@@ -1,18 +1,20 @@
 import { Unsubscribe } from 'firebase/auth';
-import { documentId, onSnapshot, query, where, doc, updateDoc } from 'firebase/firestore';
+import { documentId, onSnapshot, query, where, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams, useNavigate } from 'react-router-dom';
 import { THeldItem, useAuth } from '../context/AuthContext';
 import { itemsCollectionRef, usersCollectionRef } from '../firebase/collections';
 import { db } from '../firebase/config';
+import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
 
 const Item: React.FC = () => {
     const { itemId } = useParams();
+    const navigate = useNavigate();
     const { userData } = useAuth();
 
     const [item, setItem] = useState<any>(null);
-    const [qtyToGrab, setQtyToGrab] = useState<number>(1);
+    const [qtyToGrab, setQtyToGrab] = useState<number>(0);
 
     useEffect(() => {
         const q = query(itemsCollectionRef, where(documentId(), "==", itemId));
@@ -40,6 +42,14 @@ const Item: React.FC = () => {
                 return;
             }
 
+            if (qtyToGrab === 0) {
+                return alert("Can't grab 0 items")
+            }
+
+            if (item[0].qty === 0) {
+                return alert("This item is out of stock")
+            }
+
             const newQty = { qty: item[0].qty - qtyToGrab }
             const itemDoc = doc(db, "items", item[0].id);
             const userDoc = doc(db, "users", userId);
@@ -59,8 +69,23 @@ const Item: React.FC = () => {
         } catch (error) {
             console.log(error)
         }
-
     };
+
+    const handleDeleteItem = async () => {
+        if (!confirm("Are you sure you want to delete this item?")) {
+            return alert("Process aborted!");
+        }
+
+        try {
+            await deleteDoc(doc(db, "items", item[0].id));
+            setItem(null);
+            alert("deleted");
+            return navigate(-1);
+
+        } catch (error) {
+            alert(error)
+        }
+    }
 
     if (!userData) {
         return <Navigate
@@ -72,15 +97,30 @@ const Item: React.FC = () => {
 
     return (
         <div className=' bg-green-200 flex flex-col gap-1 items-center text-lg min-w-[250px] w-1/2 rounded-sm p-3 shadow-md'>
-            {item && (
+            {item ? (
                 <>
+                    {userData && userData.isAdmin && (
+                        <div className='flex gap-2 w-full'>
+                            <button
+                                className="bg-red-600 text-white py-2 px-3 rounded-sm self-start shadow-md hover:bg-red-700 hover:shadow-lg"
+                                onClick={handleDeleteItem}
+                            >
+                                <FaTrashAlt />
+                            </button>
+                            {/* edit btn */}
+                            {/* <button className="bg-orange-500 text-white py-2 px-3 rounded-sm self-start shadow-md hover:bg-orange-600 hover:shadow-lg">
+                                <FaPencilAlt />
+                            </button> */}
+                        </div>
+                    )}
+
                     <div className='flex flex-col gap-1'>
-                        <span>Item Name: {item[0].name}</span>
-                        <span>SKU: {item[0].sku}</span>
-                        <span>QTY: {item[0].qty}</span>
-                        <span>Company: {item[0].company}</span>
-                        <span>Location: {item[0].location}</span>
-                        <span>Toxic?: {item[0].isToxic ? "Yes" : "No"}</span>
+                        <span>Item Name: {item[0]?.name}</span>
+                        <span>SKU: {item[0]?.sku}</span>
+                        <span>QTY: {item[0]?.qty}</span>
+                        <span>Company: {item[0]?.company}</span>
+                        <span>Location: {item[0]?.location}</span>
+                        <span>Toxic?: {item[0]?.isToxic ? "Yes" : "No"}</span>
                     </div>
                     <br />
                     <div className='w-full flex flex-col py-3 gap-3 items-center border-t'>
@@ -90,7 +130,7 @@ const Item: React.FC = () => {
                                 type="number"
                                 placeholder="Enter quantity"
                                 min={1}
-                                max={item[0].qty}
+                                max={item[0]?.qty}
                                 value={qtyToGrab}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQtyToGrab(e.target.valueAsNumber)}
                             />
@@ -103,7 +143,7 @@ const Item: React.FC = () => {
                         </button>
                     </div>
                 </>
-            )}
+            ) : null}
         </div>
     )
 }
