@@ -1,34 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Unsubscribe } from 'firebase/auth';
-import { onSnapshot } from 'firebase/firestore';
-import { itemsCollectionRef } from '../../firebase/collections';
+import React from 'react';
+import { useNotifications } from '../../context/NotificationsContext';
 
 const Notifications: React.FC = () => {
-  const [lowQtyItems, setLowQtyItems] = useState<any[]>([]);
-
-  useEffect(() => {
-    const unsubscribe: Unsubscribe = onSnapshot(itemsCollectionRef, (snapshot) => {
-      const data = snapshot.docs.map((doc: any) => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-
-      const fillteredData = data.filter(item => item.minQtyWanted >= item.qty)
-      setLowQtyItems(fillteredData);
-    });
-
-    return () => {
-      console.log("Unsubscribe")
-      unsubscribe();
-    }
-  }, []);
+  const { lowQtyItems } = useNotifications();
 
   return (
     <>
       <span className='text-xl'>Low Qty Items:</span>
       {lowQtyItems.length > 0 && (
         <div className='flex flex-col gap-2'>
-          {lowQtyItems.map(item => (
+          {lowQtyItems.map((item: any) => (
             <div key={item.id} className='bg-red-400 p-4 text-lg rounded-md shadow'>
               <span > Item:{item.name}, Current QTY: {item.qty}, Minimum required: {item.minQtyWanted} </span>
             </div>

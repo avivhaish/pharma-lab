@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
 import { useAuth } from '../context/AuthContext';
+import { useNotifications } from '../context/NotificationsContext';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -9,6 +10,7 @@ const Header = () => {
     const handleToggle = () => setIsOpen(prevState => !prevState);
 
     const { logout, userData, userAuth } = useAuth();
+    const { lowQtyItems } = useNotifications();
 
     return (
         <>
@@ -36,7 +38,7 @@ const Header = () => {
                                     ADD
                                 </Link>
                             </li>
-                            <li className='mr-6 hover:cursor-pointer hover:text-teal-600'>
+                            <li className={`mr-6 hover:cursor-pointer hover:text-teal-600 ${lowQtyItems.length > 0 ? "text-red-600" : ""}`}>
                                 <Link to="/notifications">
                                     NOTIFICATIONS
                                 </Link>
@@ -81,7 +83,7 @@ const Header = () => {
                                         ADD
                                     </Link>
                                 </li>
-                                <li className='mr-6 hover:cursor-pointer text-white hover:text-slate-800 border-b-2 w-full py-2'>
+                                <li className={`${lowQtyItems.length > 0 ? "text-red-600" : "text-white"} mr-6 hover:cursor-pointer hover:text-slate-800 border-b-2 w-full py-2 `}>
                                     <Link to="/notifications">
                                         NOTIFICATIONS
                                     </Link>
