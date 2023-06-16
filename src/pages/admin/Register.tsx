@@ -1,8 +1,9 @@
-import { UserCredential } from 'firebase/auth';
+import { UserCredential, sendEmailVerification, getAuth, Auth } from 'firebase/auth';
 import React, { useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useAuth } from '../../context/AuthContext';
+
 
 const Register: React.FC = () => {
     const [fullName, setFullName] = React.useState<string>("");
@@ -25,6 +26,7 @@ const Register: React.FC = () => {
         e.preventDefault();
         try {
             const registeredUser: UserCredential = await createUser(email, password);
+            await sendEmailVerification(registeredUser.user);
 
             await addUserToDB(registeredUser.user.uid, {
                 name: fullName,

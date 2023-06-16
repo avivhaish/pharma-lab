@@ -15,6 +15,7 @@ const Login: FC = () => {
         e.preventDefault();
         try {
             await login(email, password);
+
             alert("Logged In Successfully!");
             // אם הפעולה הצליחה, לנתב לעמוד הבית
             navigate("/");

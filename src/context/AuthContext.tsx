@@ -49,7 +49,18 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
 
     const login = async (email: string, password: string) => {
         const user = await signInWithEmailAndPassword(auth, email, password);
-        setUserAuth(user);
+
+        if (user.user.metadata.creationTime) {
+            const userCreationTimestamp = new Date(user.user.metadata.creationTime);
+
+            if (userCreationTimestamp.getTime() > 1686910480123) {
+                if (!user.user.emailVerified) {
+                    throw new Error("Please verify your email before logging in");
+                }
+            }
+
+            setUserAuth(user);
+        }
     };
 
     const logout = () => {
