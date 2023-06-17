@@ -28,6 +28,7 @@ const Item: React.FC = () => {
     const [location, setLocation] = React.useState<string>("");
     const [company, setCompany] = React.useState<string>("");
     const [sku, setSku] = React.useState<string>("");
+    const [freezeDate, setFreezeDate] = React.useState<string>("");
     const [isToxic, setIsToxic] = React.useState<boolean>(false);
 
     useEffect(() => {
@@ -48,6 +49,7 @@ const Item: React.FC = () => {
             setLocation(data[0]?.location)
             setCompany(data[0]?.company)
             setSku(data[0]?.sku);
+            setFreezeDate(data[0]?.freezeDate);
             setIsToxic(data[0]?.isToxic);
         });
 
@@ -125,6 +127,7 @@ const Item: React.FC = () => {
                 company,
                 isToxic,
                 sku,
+                freezeDate,
                 minQtyWanted
             });
 
@@ -190,6 +193,9 @@ const Item: React.FC = () => {
                             <span>QTY: {item[0]?.qty}</span>
                             <span>Company: {item[0]?.company}</span>
                             <span>Location: {item[0]?.location}</span>
+                            {item[0]?.freezeDate && (
+                                <span>Freeze Date: {new Date(item[0]?.freezeDate).toLocaleDateString()}</span>
+                            )}
                             <span>Toxic?: {item[0]?.isToxic ? "Yes" : "No"}</span>
                         </div>
                     )}
@@ -254,6 +260,14 @@ const Item: React.FC = () => {
                                     placeholder="Company"
                                     value={company}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCompany(e.target.value)}
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Freeze Date</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    value={freezeDate}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFreezeDate(e.target.value)}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">

@@ -13,7 +13,10 @@ const NewItemForm = () => {
     const [location, setLocation] = React.useState<string>("");
     const [company, setCompany] = React.useState<string>("");
     const [sku, setSku] = React.useState<string>("");
+    const [freezeDate, setFreezeDate] = React.useState<string>("");
     const [isToxic, setIsToxic] = React.useState<boolean>(false);
+
+    console.log(freezeDate)
 
     useEffect(() => {
         const unsubscribe: Unsubscribe = onSnapshot(storageCollectionRef, (snapshot) => {
@@ -43,6 +46,7 @@ const NewItemForm = () => {
             company,
             isToxic,
             sku,
+            freezeDate,
             minQtyWanted
         };
 
@@ -55,6 +59,7 @@ const NewItemForm = () => {
             setLocation("");
             setSku("");
             setCompany("");
+            setFreezeDate("");
             setIsToxic(false);
         } catch (error) {
             alert("Something went wrong.");
@@ -122,6 +127,14 @@ const NewItemForm = () => {
                     placeholder="Company"
                     value={company}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCompany(e.target.value)}
+                />
+            </Form.Group>
+            <Form.Group className="mb-3">
+                <Form.Label>Freeze Date</Form.Label>
+                <Form.Control
+                    type="date"
+                    value={freezeDate}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFreezeDate(e.target.value)}
                 />
             </Form.Group>
             <Form.Group className="mb-3">
