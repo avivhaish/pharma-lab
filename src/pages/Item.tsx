@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import { Navigate, useParams, useNavigate } from 'react-router-dom';
 import { THeldItem, useAuth } from '../context/AuthContext';
-import { itemsCollectionRef, storageCollectionRef, usersCollectionRef } from '../firebase/collections';
+import { itemsCollectionRef, storageCollectionRef } from '../firebase/collections';
 import { db } from '../firebase/config';
 import { FaTrashAlt, FaPencilAlt } from 'react-icons/fa';
 import IStorage from '../models/Storage';
@@ -16,6 +16,7 @@ const Item: React.FC = () => {
 
     const [item, setItem] = useState<any>(null);
     const [qtyToGrab, setQtyToGrab] = useState<number>(0);
+    const [qtyToReturn, setQtyToReturn] = useState<number>(0);
     const [isEditMode, setIsEditMode] = useState<boolean>(false);
     const [storages, setStorages] = React.useState<IStorage[]>([]);
 
@@ -97,8 +98,10 @@ const Item: React.FC = () => {
                 id: item[0].id,
                 name: item[0].name,
                 qty: qtyToGrab,
-                timestamp: Date.now()
-            }
+                timestamp: Date.now(),
+                isGrabbed: true
+            };
+
             const newGrabbedArray = {
                 itemsHeldByUser: [...userData.itemsHeldByUser, newHeldItem]
             };
@@ -110,6 +113,43 @@ const Item: React.FC = () => {
             console.log(error)
         }
     };
+
+    const handleReturnItem = async () => {
+        try {
+            const userId = userData?.id;
+
+            if (!userId) {
+                return;
+            }
+
+            if (qtyToReturn === 0) {
+                return alert("Can't return 0 items")
+            }
+
+            const newQty = { qty: item[0].qty + qtyToReturn };
+            const itemDoc = doc(db, "items", item[0].id);
+            const userDoc = doc(db, "users", userId);
+
+            const newHeldItem: THeldItem = {
+                id: item[0].id,
+                name: item[0].name,
+                qty: qtyToReturn,
+                timestamp: Date.now(),
+                isGrabbed: false
+            }
+
+            const newGrabbedArray = {
+                itemsHeldByUser: [...userData.itemsHeldByUser, newHeldItem]
+            };
+
+            await updateDoc(itemDoc, newQty);
+            await updateDoc(userDoc, newGrabbedArray);
+            alert(`Returned ${qtyToReturn} ${item[0].name} successfully`);
+            setQtyToReturn(0);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const handleEditItem = async (e: React.SyntheticEvent) => {
         e.preventDefault();
@@ -297,26 +337,47 @@ const Item: React.FC = () => {
 
                     <br />
                     {!isEditMode && (
-                        <div className='w-full flex flex-col py-3 gap-3 items-center border-t'>
-                            <Form.Group className='w-1/2 text-center'>
-                                <Form.Label>Grab Item</Form.Label>
-                                <Form.Control
-                                    type="number"
-                                    placeholder="Enter quantity"
-                                    min={1}
-                                    max={item[0]?.qty}
-                                    value={qtyToGrab}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQtyToGrab(e.target.valueAsNumber)}
-                                />
-                            </Form.Group>
-                            <button
-                                className={`py-2 px-4 w-1/2 ${isEditMode ? "bg-gray-400" : "bg-slate-700 hover:bg-slate-800"}  rounded-sm text-white  transition-all duration-100`}
-                                onClick={handleGrabItem}
-                                disabled={isEditMode}
-                            >
-                                Grab
-                            </button>
-                        </div>
+                        <>
+                            <div className='w-full flex flex-col py-3 gap-3 items-center border-t'>
+                                <Form.Group className='w-1/2 text-center'>
+                                    <Form.Label>Grab Item</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        placeholder="Enter quantity to grab"
+                                        min={1}
+                                        max={item[0]?.qty}
+                                        value={qtyToGrab}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQtyToGrab(e.target.valueAsNumber)}
+                                    />
+                                </Form.Group>
+                                <button
+                                    className={`py-2 px-4 w-1/2 ${isEditMode ? "bg-gray-400" : "bg-slate-700 hover:bg-slate-800"}  rounded-sm text-white  transition-all duration-100`}
+                                    onClick={handleGrabItem}
+                                    disabled={isEditMode}
+                                >
+                                    Grab
+                                </button>
+                            </div>
+                            <div className='w-full flex flex-col py-3 gap-3 items-center border-t'>
+                                <Form.Group className='w-1/2 text-center'>
+                                    <Form.Label>Return Item</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        placeholder="Enter quantity to return"
+                                        min={1}
+                                        value={qtyToReturn}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQtyToReturn(e.target.valueAsNumber)}
+                                    />
+                                </Form.Group>
+                                <button
+                                    className={`py-2 px-4 w-1/2 ${isEditMode ? "bg-gray-400" : "bg-slate-700 hover:bg-slate-800"}  rounded-sm text-white  transition-all duration-100`}
+                                    onClick={handleReturnItem}
+                                    disabled={isEditMode}
+                                >
+                                    Return
+                                </button>
+                            </div>
+                        </>
                     )}
                 </>
             ) : null}

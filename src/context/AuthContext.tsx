@@ -16,7 +16,8 @@ export type THeldItem = {
     id: string,
     name: string,
     qty: number,
-    timestamp: number
+    timestamp: number,
+    isGrabbed: boolean
 }
 
 type TUserData = {
