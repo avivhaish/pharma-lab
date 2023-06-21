@@ -38,6 +38,11 @@ const Header = () => {
                                     ADD
                                 </Link>
                             </li>
+                            <li className='mr-6 hover:cursor-pointer hover:text-teal-600'>
+                                <Link to="/inventory">
+                                    INVENTORY TRACKING
+                                </Link>
+                            </li>
                             <li className={`mr-6 hover:cursor-pointer hover:text-teal-600 ${lowQtyItems.length > 0 ? "text-red-600" : ""}`}>
                                 <Link to="/notifications">
                                     NOTIFICATIONS
@@ -81,6 +86,11 @@ const Header = () => {
                                 <li className='mr-6 hover:cursor-pointer text-white hover:text-slate-800 border-b-2 w-full py-2'>
                                     <Link to="/add">
                                         ADD
+                                    </Link>
+                                </li>
+                                <li className='mr-6 hover:cursor-pointer text-white hover:text-slate-800 border-b-2 w-full py-2'>
+                                    <Link to="/inventory">
+                                        INVENTORY TRACKING
                                     </Link>
                                 </li>
                                 <li className={`${lowQtyItems.length > 0 ? "text-red-600" : "text-white"} mr-6 hover:cursor-pointer hover:text-slate-800 border-b-2 w-full py-2 `}>
