@@ -50,7 +50,7 @@ const Home: React.FC = () => {
                         <span>There are no storages. Please go to the ADD page, and create a storgae unit.</span>
                     )}
                     <ul className='w-full p-2 flex flex-col items-center text-sky-900 border-t'>
-                        {storages.map(({ id, name }) => (
+                        {storages.sort((a, b) => a.name.localeCompare(b.name)).map(({ id, name }) => (
                             <li
                                 key={id}
                                 className='h-14 bg-slate-400 mb-3 rounded-md flex justify-center items-center px-3 w-full max-w-screen-md shadow-md hover:text-white hover:bg-slate-500 hover:shadow-lg hover:cursor-pointer transition-all duration-100'
