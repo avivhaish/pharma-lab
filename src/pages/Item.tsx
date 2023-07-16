@@ -227,16 +227,17 @@ const Item: React.FC = () => {
                     )}
 
                     {!isEditMode && (
-                        <div className='flex flex-col gap-1'>
+                        <div className='flex flex-col gap-1 pt-4'>
                             <span>Item Name: {item[0]?.name}</span>
                             <span>SKU: {item[0]?.sku}</span>
                             <span>QTY: {item[0]?.qty}</span>
                             <span>Company: {item[0]?.company}</span>
+                            <span>Storage: {storages.find(storage => storage.id === item[0].parentStorage)?.name}</span>
                             <span>Location: {item[0]?.location}</span>
                             {item[0]?.freezeDate && (
                                 <span>Freeze Date: {new Date(item[0]?.freezeDate).toLocaleDateString()}</span>
                             )}
-                            <span>Toxic?: {item[0]?.isToxic ? "Yes" : "No"}</span>
+                            <span className={item[0]?.isToxic ? "text-red-500 font-extrabold" : ""}>Toxic?: {item[0]?.isToxic ? "Yes" : "No"}</span>
                         </div>
                     )}
                     {isEditMode && (

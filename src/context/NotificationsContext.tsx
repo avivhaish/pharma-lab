@@ -20,7 +20,6 @@ export const NotificationsContextProvider = ({ children }: { children: ReactNode
         });
 
         return () => {
-            console.log("Unsubscribe")
             unsubscribe();
         }
     }, []);

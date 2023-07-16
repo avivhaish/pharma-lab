@@ -26,16 +26,18 @@ const Admin: React.FC = () => {
 
     return (
         <div className='flex flex-col gap-3'>
-            <span className='text-lg'>Admin Name: {userData?.name}</span>
-            <span className='text-lg'>Inventory actions history:</span>
-            <span className='text-lg'>select a user</span>
+            <span className='text-lg'>
+                <span className='font-bold'>Admin Name:</span>
+                {" " + userData?.name}</span>
+            <span className='text-lg'>Inventory actions history</span>
+            <span className='text-lg'>Select a user:</span>
             {users.length > 0 && (
                 <Form.Select
                     defaultValue="choose an option"
                     value={selectedUser}
                     onChange={e => setSelectedUser(e.target.value)}
                 >
-                    <option disabled>choose an option</option>
+                    <option disabled>Choose an option</option>
                     {users.map((user: any) => (
                         <option key={user.id} value={user.id}>{user.name}</option>
                     ))}

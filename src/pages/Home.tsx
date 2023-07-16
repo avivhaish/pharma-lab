@@ -41,7 +41,7 @@ const Home: React.FC = () => {
             />
             <br />
             {itemInput.length > 0 && (
-                <ItemListByName name={itemInput} />
+                <ItemListByName name={itemInput} storages={storages} />
             )}
             {itemInput.length === 0 && (
                 <>
